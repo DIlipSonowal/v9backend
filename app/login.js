@@ -15,21 +15,20 @@ Router.route('/').post(jsonParser, (req, res, next) =>{
     const password = data.password;   
 
     con.connect( (err) => {
-        if (err) throw err;  
-        const sql = `select * from user_data where (email = "${user_id}" OR mobile="${user_id}") AND password="${password}"`;
-        // const sql = `select * from user_data`;
-        console.log(sql);
+        //if (err) throw err;         
+        const sql = `select ud.id, ud.user_type, ud.f_name, ud.l_name, ud.address, e.email_id, mn.mob_number from user_data as ud, email as e, mobile_number as mn where ud.password="${password}" AND (e.email_id="${user_id}" OR mn.mob_number="${user_id}")`;
+        // console.log(sql);
         con.query(sql, (err, result) => {
-            if (err) throw err;
-            console.log("result",result[0]);
-            if(result.length){
-                const accessToken = jwt.sign(user_id, process.env.ACCESS_TOKEN_SECRET);
-                res.json({jwt : accessToken, data: { id: result[0].id, user_type: result[0].user_type, f_name: result[0].f_name, l_name: result[0].l_name, email: result[0].email, mobile: result[0].mobile} });
-            } else {
-                res.sendStatus(401);
+            if (err) {
+                res.json({success: 0, statusCode:404, message: "Error occurred, try again!"});
             }
-        });
-        
+            else if(result.length) {
+                const accessToken = jwt.sign(user_id, process.env.ACCESS_TOKEN_SECRET);
+                res.json({success: 1, statusCode:200, jwt : accessToken, data: { id:result[0].id, user_type: result[0].user_type, f_name: result[0].f_name, l_name: result[0].l_name, email: result[0].email_id, mobile: result[0].mob_number, address: result[0].address} });
+            } else {
+                res.json({success: 0, statusCode:201, message: "User not found"});
+            }
+        });       
     });
 });
 
