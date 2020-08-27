@@ -4,11 +4,12 @@ const path = require("path") ;
 var https = require('https');
 var http = require('http');
 var app = express();
+var cors = require('cors');
 const bodyParser = require("body-parser");
 
 var jsonParser = bodyParser.json();
 const jwt = require('jsonwebtoken');
-app.use(bodyParser.json());
+app.use(bodyParser.json(), cors());
 app.use(express.json());
 const con = require('./database/db');
 
@@ -25,6 +26,7 @@ app.use('/task', task);
 const authTok = require('./app/jwt');
 const maxSize = 2 * 1000 * 1000; 
 var multer  = require('multer');
+//============================================
 var storage = multer.diskStorage({ 
     destination: function (req, file, cb) { 
         cb(null, "uploads") 
@@ -54,7 +56,51 @@ var upload = multer({
                 + "following filetypes - " + filetypes); 
     }  
 }).single('user_photo');
+//===========================================
 
+var storage1 = multer.diskStorage({ 
+    destination: function (req, file, cb) { 
+        cb(null, "top_slider") 
+    }, 
+    filename: function (req, file, cb) { 
+      //  console.log(`.${file.mimetype.split('/')[1]}`);
+      cb(null, Date.now()+`.${file.mimetype.split('/')[1]}`) 
+    } 
+}) 
+var upload1 = multer({ 
+    storage: storage1, 
+    dest: 'top_slider/',
+    limits: { fileSize: maxSize }, 
+    fileFilter: function (req, file, cb){   
+        // Set the filetypes, it is optional 
+        var filetypes = /jpeg|jpg|png|gif/; 
+        var mimetype = filetypes.test(file.mimetype); 
+        
+        var extname = filetypes.test(path.extname( 
+                    file.originalname).toLowerCase()); 
+        
+        if (mimetype && extname) { 
+            return cb(null, true); 
+        } 
+      
+        cb("Error: File upload only supports the "
+                + "following filetypes - " + filetypes); 
+    }  
+}).single('files');
+//===============================================
+
+var storage2 = multer.diskStorage({ 
+    destination: function (req, file, cb) { 
+        cb(null, "images/") 
+    }, 
+    filename: function (req, file, cb) { 
+      //  console.log(`.${file.mimetype.split('/')[1]}`);
+      cb(null, Date.now()+file.originalname) 
+    } 
+}) 
+var upload2 = multer({ 
+    storage: storage2 
+});
 //===========Create employee=====================
 app.post('/home/createEmployee', authTok, jsonParser, (req, res)=> {   
     upload(req,res,function(err) {  
@@ -118,12 +164,62 @@ app.post('/home/createEmployee', authTok, jsonParser, (req, res)=> {
     }) 
 });
 
-app.get('/', (req, res) => {
-    res.sendfile('upload.html');
+app.post('/our_goals', authTok, jsonParser, upload2.array('images',2), (req, res) => {
+   // upload2(req,res,function(err) {   
+        res.setHeader('Access-Control-Allow-Origin', '*');  
+        const resObj = { success: [], error:[], message:[] };
+        const data = req.body;
+        let file_name = [];
+         req.files.forEach( (f,i)=> {           
+            file_name.push(f.filename);
+        });
+        const imga = file_name.join(',');
+        //console.log("file", req.files);
+        //res.json(data);
+        con.connect( (err0)=> {  
+                const sql = `insert into home(category, sub_header, header, text_content, img) values ("our_goals","${data.sub_header}","${data.header}","${data.text_content}","${imga}")`;
+                //console.log(sql);
+                con.query(sql, (err000, result1)=>{
+                    //console.log("result2",sql);
+                    if(err000) {
+                        resObj.error.push("Data not added, try again");
+                    }
+                    else {
+                        resObj.success.push("Data added to Our goal section...");         
+                        resObj.message.push("Data added successfully...");              
+                    }
+                    res.json(resObj);
+                });
+        });            
 });
-app.post('/upload', (req,res) =>{
-    console.log(req.file);
+
+app.post('/top_slider', authTok, jsonParser, (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    upload1(req,res,function(err) {     
+        
+        const resObj = { success: [], error:[], message:[] };
+        const data = req.body;
+        const file_name = req.file.filename;
+        console.log("file", data);
+        con.connect( (err0)=> {  
+                const sql = `insert into home(category, sub_header, header, text_content, img) values 
+                ("top_slider","${data.sub_header}","${data.header}","${data.text_content}","${file_name}")`;
+                //console.log(sql);
+                con.query(sql, (err000, result1)=>{
+                    //console.log("result2",sql);
+                    if(err000) {
+                        resObj.error.push("Data not added to top slider, try again");
+                    }
+                    else {
+                        resObj.success.push("Data added to top slider...");         
+                        resObj.message.push("Data added successfully...");              
+                    }
+                    res.json(resObj);
+                })
+        })              
+    })
 });
+
 app.listen(8000, ()=>{
     console.log("server is up at 8000");
 });

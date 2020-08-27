@@ -20,7 +20,7 @@ Router.route('/country')
 });
    
 Router.route('/state') 
-.post((req, res) => {
+.post((req, res) => { 
     const data = req.body;
     const sql = `select country_id, state_name from state where country_id=${data.id}`;
     con.connect( err => {

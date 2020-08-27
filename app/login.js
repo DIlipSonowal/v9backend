@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 Router.route('/').post(jsonParser, (req, res, next) =>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
    //console.log(con);
     const data = req.body;
     const user_id  = data.user_name;

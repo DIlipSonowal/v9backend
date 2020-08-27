@@ -1,81 +1,69 @@
 
 const express = require('express'); 
 const Router = express.Router(); 
-const authTok = require('../jwt');
+
+var cors = require('cors');
+//const authTok = require('../jwt');
 const bodyParser = require("body-parser");
-//const multer = require('multer');
-//const topslider = multer({dest: 'top_slider/'});
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
-//var jsonParser = bodyParser.json();
+var jsonParser = bodyParser.json();
 app = express();
+const con = require('../../database/db');
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(express.json(), cors());
+app.use(express.static('public'));
 
 
-// app.post('/top-slider', authTok, upload.single('image_name'),  (req, res)=> {
-//     // req.file is the name of your file in the form above, here 'uploaded_file'
-//     // req.body will hold the text fields, if there were any 
-//     console.log(req.file, req.body)
-//     respo
-//  });
+Router.route('/top-slider').get((req, res, next) => { 
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    con.connect(err =>{
+    //    if(err) {
+    //         res.json({success:0, message:'Server error, please try again!!!'});
+    //    } else {
+            con.query( "select * from home where `category`='top_slider' order BY id desc limit 3", (err1,result)=> {
+                if(err1) {
+                    res.json({success:0, message:'Server error, please try again!!'});
+               } else {
+                   let arr = [];
+                   //console.log(result);
+                   //res.json(result);
+                   result.forEach( el => {
+                        arr.push({sub_header: el.sub_header, header: el.header, text_content: el.text_content, img:`./v9Backend/top_slider/${el.img}`});
+                   });
+                   res.json(arr);
+               }
+            });
+     //  }
+   });
+});
 
-
-//app.use(bodyParser.urlencoded({extended: false}));
-//app.use(bodyParser.json());
-//app.use(express.json());
-//app.use(express.static('public'));
-  
-//  var Storage = multer.diskStorage({
-//     destination: function(req, file, callback) {
-//         callback(null, "./assets/top_slider");
-//     },
-//     filename: function(req, file, callback) {
-//         callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
-//     }
-// });
-//   var upload = multer({ storage : storage}).single('image');
-  
-
-// Router.route('/top-slider')
-// .get(authTok,(req, res, next) => { 
-//     res.end('When a GET request is made, then this '
-//             + 'is the response sent to the client!'); 
-// }) 
-// .post(authTok, upload.single('image_name'),  (req, res)=> {
-//     // req.file is the name of your file in the form above, here 'uploaded_file'
-//     // req.body will hold the text fields, if there were any 
-//     console.log(req.file, req.body)
-//     //const data = req.body;
-//     //console.log(req.file);
-//     //if(req.files) {
-//     //    res.json(req.image);
-//     //}
-//     //else throw 'error';
-//     //res.json(req.file);
-//     //res.json({});
-// });
-
-
-Router.route('/our-goals') 
-.all((req, res, next) => {  
-    res.statusCode = 200; 
-    res.setHeader('Content-Type', 'text/plain'); 
-    next(); 
-}) 
-.get((req, res, next) => { 
-    res.end('our goals'); 
-}) 
-.post((req, res, next) => { 
-    console.log(req.body);
-    res.end('When a POST request is made, then this '
-            + 'is the response sent to the client!'); 
-}) 
-.put((req, res, next) => { 
-    res.end('When a PUT request is made, then this '
-            + 'is the response sent to the client!'); 
-}) 
-.delete((req, res, next) => { 
-    res.end('When a DELETE request is made, then this '
-            + 'is the response sent to the client!'); 
-}); 
+Router.route('/our-goals').get((req, res, next) => { 
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    con.connect(err =>{
+        // if(err) {
+        //      res.json({success:0, message:'Server error, please try again!!!'});
+        // } else {
+             con.query( "select * from home where `category`='our_goals' order BY id desc limit 1", (err1,result)=> {
+                 if(err1) {
+                     res.json({success:0, message:'Server error, please try again!!'});
+                } else {
+                    let arr = [];
+                    //console.log(result);
+                    //res.json(result);
+                    result.forEach( el => {
+                         
+                         let aimg = [];
+                         el.img.split(',').forEach(im =>{
+                            aimg.push(`./v9Backend/images/${im}`);
+                         });
+                         arr.push({sub_header: el.sub_header, header: el.header, text_content: el.text_content, img:aimg});
+                    });
+                    res.json(arr);
+                }
+             });
+       // }
+    });
+});
    
 module.exports = Router; 
