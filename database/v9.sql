@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 24, 2020 at 09:35 AM
+-- Generation Time: Aug 29, 2020 at 08:32 AM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -338,16 +338,44 @@ CREATE TABLE IF NOT EXISTS `home` (
   `category` varchar(100) NOT NULL,
   `sub_header` varchar(255) NOT NULL,
   `header` varchar(500) NOT NULL,
-  `text_content` varchar(500) DEFAULT NULL,
-  `img` varchar(50) DEFAULT NULL,
+  `text_content` text,
+  `img` varchar(255) DEFAULT NULL,
   `icon` varchar(50) DEFAULT NULL,
   `count` varchar(9) DEFAULT NULL,
   `icon_category` varchar(100) DEFAULT NULL,
   `small_header` varchar(100) DEFAULT NULL,
   `small_description` varchar(100) DEFAULT NULL,
-  `last_update` datetime NOT NULL,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `home`
+--
+
+INSERT INTO `home` (`id`, `category`, `sub_header`, `header`, `text_content`, `img`, `icon`, `count`, `icon_category`, `small_header`, `small_description`, `last_update`) VALUES
+(1, 'top_slider', 'this is a subheader', 'undefined', 'this is a dummy text content', '1598285799699.png', NULL, NULL, NULL, NULL, NULL, '2020-08-24 21:46:39'),
+(2, 'top_slider', 'this is a subheader', 'undefined', 'this is a dummy text content', '1598286045807.png', NULL, NULL, NULL, NULL, NULL, '2020-08-24 21:50:45'),
+(3, 'top_slider', 'this is a subheader', 'undefined', 'this is a dummy text content', '1598286161087.png', NULL, NULL, NULL, NULL, NULL, '2020-08-24 21:52:41'),
+(4, 'top_slider', 'this is a subheader', 'this is a header', 'this is a dummy text content', '1598286272616.png', NULL, NULL, NULL, NULL, NULL, '2020-08-24 21:54:32'),
+(5, 'top_slider', 'this is a subheader', 'this is a header', 'this is a dummy text content', '1598286388053.png', NULL, NULL, NULL, NULL, NULL, '2020-08-24 21:56:28'),
+(6, 'our_goals', 'subheader', 'header', 'textcontent', '1598294856087v9-logo.png,1598294856088v9-logo-white.png', NULL, NULL, NULL, NULL, NULL, '2020-08-25 00:17:36'),
+(7, 'our_goals', 'subheader', 'header', 'textcontent', '1598295024763v9-logo.png,1598295024764v9-logo-white.png', NULL, NULL, NULL, NULL, NULL, '2020-08-25 00:20:24'),
+(8, 'our_goals', 'subheader', 'header', 'textcontent', 'v9-logo.png,v9-logo-white.png', NULL, NULL, NULL, NULL, NULL, '2020-08-25 00:22:36'),
+(9, 'our_goals', 'subheader', 'header', 'textcontent', '1598295308755v9-logo.png,1598295308812v9-logo-white.png', NULL, NULL, NULL, NULL, NULL, '2020-08-25 00:25:08'),
+(10, 'top_slider', 'this is a subheader', 'this is a header', 'this is a dummy text content', '1598375350057.png', NULL, NULL, NULL, NULL, NULL, '2020-08-25 22:39:10'),
+(11, 'top_slider', 'this is a subheader  fdgfdgfdv222222', 'this is a header', 'this is a dummy text content', '1598383776572.png', NULL, NULL, NULL, NULL, NULL, '2020-08-26 00:59:36'),
+(12, 'top_slider', 'from frontend', 'from frontend', '', '1598385371977.jpeg', NULL, NULL, NULL, NULL, NULL, '2020-08-26 01:26:12'),
+(13, 'top_slider', 'from frontend', 'from frontend', '', '1598385541538.jpeg', NULL, NULL, NULL, NULL, NULL, '2020-08-26 01:29:01'),
+(14, 'top_slider', 'Top slider from frontend', 'Top slider from frontend', '', '1598458847609.jpeg', NULL, NULL, NULL, NULL, NULL, '2020-08-26 21:50:47'),
+(15, 'our_goals', 'ewtewtew trewtrewt', '6666', 'ter rewrw wrewr ewrewrw ewrewrw ewrew werew wr w wer  werw  wwr ', '', NULL, NULL, NULL, NULL, NULL, '2020-08-26 22:39:43'),
+(16, 'our_goals', 'ewtewtew trewtrewt', 'Our Goals latest', 'tear dsgfset dsfdsv dsds dsvds dsds dsv sdvsd sds svsd sf ', '1598463413155IMG-20191019-WA0000.jpg,1598463413236Capture1.JPG', NULL, NULL, NULL, NULL, NULL, '2020-08-26 23:06:53'),
+(17, 'our_goals', 'ewtewtew trewtrewt', 'Our Goals latest', 'tear dsgfset dsfdsv dsds dsvds dsds dsv sdvsd sds svsd sf ', '1598463607002Capture.JPG,1598463607049IMG-20191019-WA0000.jpg', NULL, NULL, NULL, NULL, NULL, '2020-08-26 23:10:07'),
+(18, 'home_about', 'About v9 Immegration', 'This is a header', 'Some text content here', NULL, NULL, NULL, NULL, NULL, NULL, '2020-08-27 18:22:38'),
+(19, 'home_about', 'About v9 immigration from frontend', 'This is a header section with somecontent', '\nV9 Immigration Services, the leading Immigration service provider in Canada and India. With immense experience of client servicing and facilitating individuals to achieve their dreams, V9 Immigration Services has carved his own elite niche for providing the best immigration services.V9 Immigration services is the leader in the market for two things; first its honesty and transparency while dealing with the clients and second its accuracy and efficiency while working for the clients.', NULL, NULL, NULL, NULL, NULL, NULL, '2020-08-27 19:44:08'),
+(20, 'why_us', 'from frontend', 'dsfdsfsdfssdfsdfsf terwrv werwerewr ewrwerw wrwerew ewrwer ', '{\"immigration\":{\"title1\":\"Title 12\",\"count\":\"32+\",\"title2\":\"Title 22\",\"icon\":\"1598557532538Capture.JPG\"},\"customer\":{\"title1\":\"Title 13\",\"count\":\"43+\",\"title2\":\"Title 23\",\"icon\":\"1598557532554Capture1.JPG\"},\"student\":{\"title1\":\"Title 11\",\"count\":\"12+\",\"title2\":\"Title 21\",\"icon\":\"1598557532571IMG-20191019-WA0000.jpg\"},\"country\":{\"title1\":\"Title 14\",\"count\":\"56+\",\"title2\":\"Title 24\",\"icon\":\"1598557532575passportphoto.JPG\"}}', NULL, NULL, NULL, NULL, NULL, NULL, '2020-08-28 01:15:32'),
+(21, 'why_us', 'WHY CHOOSE US', 'Since our founding, our primary goal has been to provide immigration in all over country and universities. Our impact is speak louder than our word', '{\"immigration\":{\"title1\":\"Immigration\",\"count\":\"234+\",\"title2\":\"99.9% client satisfaction\",\"icon\":\"1598625479223home6_icon3.png\"},\"customer\":{\"title1\":\"SUCCSESSFUL CUSTOMERS\",\"count\":\"353+\",\"title2\":\"Business Cases\",\"icon\":\"1598625479262home6_icon2.png\"},\"student\":{\"title1\":\"Student\",\"count\":\"480+\",\"title2\":\"National top 50 consulting firms\",\"icon\":\"1598625479298home6_icon1.png\"},\"country\":{\"title1\":\"Country\",\"count\":\"480+\",\"title2\":\"Operated in 15+ Countries\",\"icon\":\"1598625479301home6_icon4.png\"}}', NULL, NULL, NULL, NULL, NULL, NULL, '2020-08-28 20:07:59'),
+(22, 'immigration_service', 'Immigration Service', 'Our experts are able to find new growth opportunities in your business. sodales erat et libero ultricies auctor et rhoncus sapien.', '{\"family\":{\"title\":\"Family\",\"para\":\"As mentioned by the minister on 11-Jan-2019 Family reunification is always an immigration priority for the Government of Canada as it supports economic prosperity and strengthens the communities\",\"img\":\"1598641028265family.jpg\"},\"work\":{\"title\":\"Work Visa\",\"para\":\"As mentioned by the minister on 11-Jan-2019 Family reunification is always an immigration priority for the Government of Canada as it supports economic prosperity and strengthens the communities\",\"img\":\"1598641028343home2.jpg\"},\"study\":{\"title\":\"Study\",\"para\":\"As mentioned by the minister on 11-Jan-2019 Family reunification is always an immigration priority for the Government of Canada as it supports economic prosperity and strengthens the communities\",\"img\":\"1598641028387post-two-457x573.jpg\"},\"visit\":{\"title\":\"Visit Visa\",\"para\":\"As mentioned by the minister on 11-Jan-2019 Family reunification is always an immigration priority for the Government of Canada as it supports economic prosperity and strengthens the communities\",\"img\":\"1598641028388Canada-permanent-resident.jpg\"},\"citizenship\":{\"title\":\"Citizenship\",\"para\":\"As mentioned by the minister on 11-Jan-2019 Family reunification is always an immigration priority for the Government of Canada as it supports economic prosperity and strengthens the communities\",\"img\":\"1598641028391travel-visa.jpg\"},\"other\":{\"title\":\"Other\",\"para\":\"As mentioned by the minister on 11-Jan-2019 Family reunification is always an immigration priority for the Government of Canada as it supports economic prosperity and strengthens the communities\",\"img\":\"1598641028392working-visa.jpg\"}}', NULL, NULL, NULL, NULL, NULL, NULL, '2020-08-29 00:27:08');
 
 -- --------------------------------------------------------
 
