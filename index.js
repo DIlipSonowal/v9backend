@@ -220,6 +220,100 @@ app.post('/top_slider', authTok, jsonParser, (req,res) => {
     })
 });
 
+app.post('/whychooseus', authTok, jsonParser, upload2.array('images',4), (req, res) =>{
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+        const resObj = { success: [], error:[], message:[] };
+        const data = req.body;
+        let file_name = [];
+         req.files.forEach( (f,i)=> {           
+           // file_name.push(f.filename);
+            if(i ==0){
+                data['immigration'] = JSON.parse(data['immigration']);
+                data['immigration'].icon = f.filename;
+            }
+            if(i ==1){
+                data['customer'] = JSON.parse(data['customer']);
+                data['customer'].icon = f.filename;
+            }
+            if(i ==2){
+                data['student'] = JSON.parse(data['student']);
+                data['student'].icon = f.filename;
+            }
+            if(i ==3){
+                data['country'] = JSON.parse(data['country']);
+                data['country'].icon = f.filename;
+            }
+        });
+
+        const final_string = JSON.stringify({immigration: data["immigration"], customer: data['customer'], student: data['student'], country: data['country']});
+        //const imga = file_name.join(',');
+        //console.log("file", final_string);
+    // res.json(JSON.parse(final_string));
+        con.connect( (err0)=> {  
+                const sql = `insert into home(category, sub_header, header, text_content) values ("why_us","${data.sub_header}","${data.header}",'${final_string}')`;
+                //console.log(sql);
+                con.query(sql, (err000, result1)=>{
+                    //console.log("result2",sql);
+                    if(err000) {
+                        resObj.error.push("Data not added, try again");
+                    }
+                    else {
+                        resObj.success.push("Data added to why choose us section...");         
+                        resObj.message.push("Data added successfully...");              
+                    }
+                    res.json(resObj);
+                });
+        });            
+});
+
+app.post('/immigration_service', authTok, jsonParser, upload2.array('images',6), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const resObj = { success: [], error:[], message:[] };
+    const data = req.body;
+    let file_name = [];
+    req.files.forEach( (f,i)=> {           
+           // file_name.push(f.filename);
+        if(i ==0){
+            data['family'] = JSON.parse(data['family']);
+            data['family'].img = f.filename;
+        }
+        if(i ==1){
+            data['work'] = JSON.parse(data['work']);
+            data['work'].img = f.filename;
+        }
+        if(i ==2){
+            data['study'] = JSON.parse(data['study']);
+            data['study'].img = f.filename;
+        }
+        if(i ==3){
+            data['visit'] = JSON.parse(data['visit']);
+            data['visit'].img = f.filename;
+        }
+        if(i ==4){
+            data['citizenship'] = JSON.parse(data['citizenship']);
+            data['citizenship'].img = f.filename;
+        }
+        if(i ==5){
+            data['other'] = JSON.parse(data['other']);
+            data['other'].img = f.filename;
+        }
+        
+    });
+
+    const final_string = JSON.stringify({family: data['family'], work: data['work'], study: data['study'], visit: data['visit'], citizenship:data['citizenship'], other: data['other']});
+    con.connect( err => {
+        const sql = `insert into home(category, sub_header, header, text_content) values("immigration_service",'${data.header}','${data.sub_header}','${final_string}')`;
+        console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
 app.listen(8000, ()=>{
     console.log("server is up at 8000");
 });
