@@ -18,6 +18,10 @@ const home = require('./app/modules/home');
 const common = require('./app/modules/common');
 const task = require('./app/task');
 
+app.use('/uploads',express.static('uploads'));
+app.use('/top_slider',express.static('top_slider'));
+app.use('/images',express.static('images'));
+
 app.use('/login', login);
 app.use('/home', home);
 app.use('/common', common);
@@ -312,6 +316,95 @@ app.post('/immigration_service', authTok, jsonParser, upload2.array('images',6),
             }
         });
     });
+});
+
+app.post('/feedback', authTok, jsonParser, upload2.array('images',1), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const data = req.body;
+    const filename = req.files[0].filename;
+    con.connect( err => {
+        const sql = `insert into home(category, sub_header, header, img) values("feed_back",'${data.header}','${data.sub_header}','${filename}')`;
+        console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
+app.post('/teams_photo', authTok, jsonParser, upload2.array('images',1), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const data = req.body;
+    const filename = req.files[0].filename;
+    con.connect( err => {
+        const sql = `insert into home(category, sub_header, header, img) values("teams",'blank','blank','${filename}')`;
+        //console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
+app.post('/aboutV9immigration', authTok, jsonParser, upload2.array('images',1), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const data = req.body;
+    const filename = req.files[0].filename;
+    con.connect( err => {
+        const sql = `insert into about(category, header, sub_header, text_content, img) values("why-v9","${data.header}","${data.text_content}",'${data.lists}','${filename}')`;
+        //console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
+app.post('/about_mission', authTok, jsonParser, upload2.array('images',1), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const data = req.body;
+    const filename = req.files[0].filename;
+    con.connect( err => {
+        const sql = `insert into about(category, header, text_content, img) values("our_mission","${data.header}","${data.text_content}",'${filename}')`;
+        //console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
+app.post('/our_vission', authTok, jsonParser, upload2.array('images',1), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const data = req.body;
+    const filename = req.files[0].filename;
+    con.connect( err => {
+        const sql = `insert into about(category, header, text_content, img) values("our_vission","${data.header}","${data.text_content}",'${filename}')`;
+        //console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
+app.get('/', (req,res)=>{
+    res.json({success:1});
 });
 
 app.listen(8000, ()=>{
