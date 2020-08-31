@@ -338,4 +338,26 @@ Router.route('/our_values')
     });
 });
 
+Router.route('/about_ceo')
+.get((req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    con.connect( err =>{
+        const sql = `select header, text_content, img from about where category="about_ceo" order by id desc limit 1`;
+        con.query(sql, (err1, result)=> {
+            if(err1){ res.json({}); }
+            else{        
+                const dta = result[0];
+                 const a = JSON.parse(dta.text_content);
+                // console.log(dta.text_content);
+                res.json({
+                    header: dta.header,
+                    name: a.name,
+                    sub_title: a.sub_title,
+                    text_content: a.text_content,
+                    img: `${url()}/images/${dta.img}`
+                });
+            }
+        });
+    });
+});
 module.exports = Router; 

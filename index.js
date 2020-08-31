@@ -403,6 +403,28 @@ app.post('/our_vission', authTok, jsonParser, upload2.array('images',1), (req, r
     });
 });
 
+app.post('/about_ceo', authTok, jsonParser, upload2.array('images',1), (req, res)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');  
+    const data = req.body;
+    const filename = req.files[0].filename;
+    con.connect( err => {
+        const fnl_string = JSON.stringify({
+            name: data.name,
+            sub_title: data.sub_header,
+            text_content: data.text_content
+        });
+        const sql = `insert into about(category, header, text_content, img) values("about_ceo","${data.header}",'${fnl_string}','${filename}')`;
+        //console.log(sql);
+        con.query(sql, (err, result) => {
+            if(err) {
+                res.json({success: 0, message: "Error occurred, try again later!"});
+            } else {
+                res.json({success: 1, message: "Data saved successfully."});
+            }
+        });
+    });
+});
+
 app.get('/', (req,res)=>{
     res.json({success:1});
 });
